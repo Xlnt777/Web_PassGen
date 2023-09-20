@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Password generator</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/x-icon">
+</head>
+<body>
+	<div class="container">
+    <div class="generatorBlock">
+      <div class="head">
+        <p>Generate your password</p>
+      </div>
+      <div class="boxSlider">
+        <p>Password length</p>
+        <div class="box">
+          <input type="range" class="range" id="lengthInput" value="16" min="4" max="32" onmousemove="rangeSlider1(this.value)">
+          <span id="rangeValue1">16</span>
+        </div>
+        
+        <p>Number of generated passwords</p>
+        <div class="box">
+          <input type="range" class="range" id="passwordCount" value="1" min="1" max="10" onmousemove="rangeSlider2(this.value)">
+          <span id="rangeValue2">1</span>
+        </div>
+      </div>
+
+      <div class="boxButtons">
+        <div class="boxCheckbox">
+          <label class="checkboxBtn">
+            <input type="checkbox" id="lowerButton" name="button_value" checked disabled>
+            <span>a-z</span>
+          </label>
+
+          <label class="checkboxBtn">
+            <input type="checkbox" id="upperButton" name="button_value" value="Включена">
+            <span>A-Z</span>
+          </label>
+
+          <label class="checkboxBtn">
+            <input type="checkbox" id="digits" name="button_value" value="Включена" >
+            <span>0-9</span>
+          </label>
+
+          <label class=checkboxBtn>
+            <input type="checkbox" id="punctuation" name="button_value" value="Включена">
+            <span>#$%</span>
+          </label>
+        
+        </div>
+        <div class="mainButton">
+          <button id='generateButton'>Generate</button>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="passwordContainer">
+    
+    </div>
+ 
+   
+  </div>
+
+
+	<script>
+
+    function rangeSlider1(value) {
+        document.getElementById('rangeValue1').innerHTML = value;
+      }
+    function rangeSlider2(value) {
+        document.getElementById('rangeValue2').innerHTML = value;
+      }   
+     
+    $(document).ready(function() {
+      $('#generateButton').click(function() {
+
+        if(typeof passwordString == "undefined"){
+          $('.passwordContainer').css({'display': 'block'});
+        }
+
+        var length = $('#lengthInput').val();
+        var count = $('#passwordCount').val();
+        var buttonValue1 = $('#upperButton').is(':checked');
+        var buttonValue2 = $('#digits').is(':checked');
+        var buttonValue3 = $('#punctuation').is(':checked')
+        $.ajax({
+          url: '/clicked', 
+          type: 'POST',
+          data: {length_Input: length,
+                password_Count: count,
+                button_value1: buttonValue1,
+                button_value2: buttonValue2,
+                button_value3: buttonValue3},
+
+          success: function(response) {
+            var passwords = response.password;
+            var passwordString = passwords.join('<br>');
+            $('.passwordContainer').html(passwordString);
+          } 
+        });
+      });
+    });
+    
+    
+         
+    
+
+    </script>
+</body>
+</html>
