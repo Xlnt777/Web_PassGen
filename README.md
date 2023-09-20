@@ -3,4 +3,4 @@ Install pip install -r \requirements.txt
 
 ## Screenshots
 
-(screenshots/Web_App.png)
+![](screenshots/Web_App.png)
